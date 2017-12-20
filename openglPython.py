@@ -82,7 +82,23 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        glRotatef(1, 1, 3, 1)
+
+            if event.type == pygame.K_DOWN:
+                if event.type == pygame.K_LEFT:
+                    glTranslatef(-5, 0, 0)
+                if event.type == pygame.K_RIGHT:
+                    glTranslatef(5, 0, 0)
+                if event.type == pygame.K_UP:
+                    glTranslatef(1, 0, 0)
+                if event.type == pygame.K_DOWN:
+                    glTranslatef(-1, 0, 0)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 4:
+                    glTranslatef(0, 0, 1.0)
+                if event.button == 5:
+                    glTranslatef(0, 0, -1.0)
+
+        # glRotatef(1, 1, 3, 1)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         Cube()
         pygame.display.flip()
