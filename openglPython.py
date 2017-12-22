@@ -88,7 +88,7 @@ def main():
                 pygame.quit()
                 quit()
 
-            if event.type == pygame.K_DOWN:
+            if event.type == pygame.KEYDOWN:
                 if event.type == pygame.K_LEFT:
                     # glTranslatef(-5, 0, 0)
                     x_move = 0.3
@@ -97,12 +97,12 @@ def main():
                     x_move = -0.3
                 if event.type == pygame.K_UP:
                     # glTranslatef(1, 0, 0)
-                    y_move = 0.3
+                    y_move = -0.3
                 if event.type == pygame.K_DOWN:
                     # glTranslatef(-1, 0, 0)
-                    y_move = -0.3
+                    y_move = 0.3
 
-            if event.type == pygame.K_UP:
+            if event.type == pygame.KEYUP:
                 if event.type == pygame.K_LEFT or event.type == pygame.K_RIGHT:
                     x_move = 0
                 if event.type == pygame.K_UP or event.type == pygame.K_DOWN:
@@ -123,7 +123,7 @@ def main():
         if camera_z < -1:
             object_passed = True
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        glTranslatef(0, 0, 1.0)
+        glTranslatef(x_move, y_move, 1.0)
         Cube()
         pygame.display.flip()
         pygame.time.wait(10)
