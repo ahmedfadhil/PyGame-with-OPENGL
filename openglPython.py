@@ -117,6 +117,11 @@ def main():
         # glRotatef(1, 1, 3, 1)
         x = glGetDoublev(GL_MODELVIEW_MATRIX)
         print(x)
+        camera_x = x[3][0]
+        camera_y = x[3][1]
+        camera_z = x[3][2]
+        if camera_z < -1:
+            object_passed = True
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glTranslatef(0, 0, 1.0)
         Cube()
@@ -124,4 +129,7 @@ def main():
         pygame.time.wait(10)
 
 
-main()
+for x in range(10):
+    main()
+pygame.quit()
+quit()
