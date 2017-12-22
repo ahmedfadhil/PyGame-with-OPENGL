@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
+import random
 
 vertices = (
     (1, -1, -1),
@@ -75,9 +76,13 @@ def main():
     display = (800, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
     gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
-    glTranslatef(0.0, 0.0, -5)
-    glRotatef(0, 0, 0, 0)
-    while True:
+    glTranslatef(random.randrange(-5, 5), random.randrange(-5, 5), -5)
+    object_passed = False
+    # glRotatef(0, 0, 0, 0)
+    x_move = 0
+    y_move = 0
+
+    while not object_passed:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -85,13 +90,24 @@ def main():
 
             if event.type == pygame.K_DOWN:
                 if event.type == pygame.K_LEFT:
-                    glTranslatef(-5, 0, 0)
+                    # glTranslatef(-5, 0, 0)
+                    x_move = 0.3
                 if event.type == pygame.K_RIGHT:
-                    glTranslatef(5, 0, 0)
+                    # glTranslatef(5, 0, 0)
+                    x_move = -0.3
                 if event.type == pygame.K_UP:
-                    glTranslatef(1, 0, 0)
+                    # glTranslatef(1, 0, 0)
+                    y_move = 0.3
                 if event.type == pygame.K_DOWN:
-                    glTranslatef(-1, 0, 0)
+                    # glTranslatef(-1, 0, 0)
+                    y_move = -0.3
+
+            if event.type == pygame.K_UP:
+                if event.type == pygame.K_LEFT or event.type == pygame.K_RIGHT:
+                    x_move = 0
+                if event.type == pygame.K_UP or event.type == pygame.K_DOWN:
+                    y_move = 0
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 4:
                     glTranslatef(0, 0, 1.0)
@@ -99,7 +115,10 @@ def main():
                     glTranslatef(0, 0, -1.0)
 
         # glRotatef(1, 1, 3, 1)
+        x = glGetDoublev(GL_MODELVIEW_MATRIX)
+        print(x)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        glTranslatef(0, 0, 1.0)
         Cube()
         pygame.display.flip()
         pygame.time.wait(10)
