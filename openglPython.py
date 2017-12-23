@@ -56,30 +56,30 @@ colors = (
     (0, 1, 1),
 )
 
-ground_surfaces = (0,1,2,3)
 
-ground_vertices = (
-    (-10,-1.1,50),
-    (10,-1.1,50),
-    (-10,-1.1,-300),
-    (10,-1.1,-300),
+##ground_vertices = (
+##    (-10, -1.1, 20),
+##    (10, -1.1, 20),
+##    (-10, -1.1, -300),
+##    (10, -1.1, -300),
+##    )
+##
+##
+##def ground():
+##    glBegin(GL_QUADS)
+##    for vertex in ground_vertices:
+##        glColor3fv((0,0.5,0.5))
+##        glVertex3fv(vertex)
+##
+##    glEnd()
 
-    )
-
-def ground():
-    glBegin(GL_QUADS)
-    for vertex in ground_vertices:
-        glColor3fv((0,0.5,0.5))
-        glVertex3fv(vertex)
-
-    glEnd()
 
 
-def set_vertices(max_distance):
+
+def set_vertices(max_distance, min_distance=-20):
     x_value_change = random.randrange(-10, 10)
-    # y_value_change = random.randrange(-10, 10)
-    y_value_change = -1
-    z_value_change = random.randrange(-1 * max_distance, -20)
+    y_value_change = random.randrange(-10, 10)
+    z_value_change = random.randrange(-1 * max_distance, min_distance)
 
     new_vertices = []
 
@@ -124,7 +124,9 @@ def main():
     display = (800, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
 
-    gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
+    max_distance = 100
+
+    gluPerspective(45, (display[0] / display[1]), 0.1, max_distance)
 
     glTranslatef(random.randrange(-5, 5), random.randrange(-5, 5), -40)
 
@@ -132,8 +134,6 @@ def main():
 
     x_move = 0
     y_move = 0
-
-    max_distance = 100
 
     cube_dict = {}
 
@@ -173,11 +173,7 @@ def main():
                     ##                if event.button == 5:
                     ##                    glTranslatef(0,0,-1.0)
 
-        # glRotatef(1, 3, 1, 1)
-
         x = glGetDoublev(GL_MODELVIEW_MATRIX)
-        # print(x)
-
 
         camera_x = x[3][0]
         camera_y = x[3][1]
@@ -186,9 +182,19 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         glTranslatef(x_move, y_move, .50)
-        ground()
+
+        # ground()
+
         for each_cube in cube_dict:
             Cube(cube_dict[each_cube])
+
+        for each_cube in cube_dict:
+            if camera_z <= cube_dict[each_cube][0][2]:
+                print("passed a cube")
+                # delete_list.append(each_cube)
+                new_max = int(-1 * (camera_z - max_distance))
+
+                cube_dict[each_cube] = set_vertices(new_max, int(camera_z))
 
         pygame.display.flip()
         pygame.time.wait(10)
